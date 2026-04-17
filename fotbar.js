@@ -171,37 +171,34 @@ function jepretKeCanvas(nomor) {
   let sY = 0;
 
   if (videoRatio > canvasRatio) {
+    // Jika rasio video lebih lebar dari kanvas, crop bagian kiri & kanan
     sWidth = sHeight * canvasRatio;
     sX = (video.videoWidth - sWidth) / 2;
   } else {
+    // Jika rasio video lebih tinggi dari kanvas, crop bagian atas & bawah
+    // Ini memastikan mukamu tetap proporsional, tidak ditarik jadi lebar!
     sHeight = sWidth / canvasRatio;
     sY = (video.videoHeight - sHeight) / 2;
   }
 
-  // --- KODE BARU UNTUK MEMBUAT CANVAS MIRROR PERMANEN ---
-  ctx.save(); // Simpan kondisi canvas
-  ctx.translate(canvas.width, 0); // Pindahkan titik awal ke pojok kanan
-  ctx.scale(-1, 1); // Balikkan sumbu X (mirror horizontal)
-
-  // Draw gambar dengan arah yang sudah dibalik
+  // Draw gambar dengan cropping yang proporsional
   ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
-
-  ctx.restore(); // Kembalikan kondisi canvas ke semula agar aman
 }
 
 // --- FUNGSI SAVE & SHARE ---
 function downloadFotbar() {
   const mesinZone = document.getElementById("mesin-print-zone");
-  const slots = document.querySelectorAll(".photo-slot"); // (opsional, bisa dihapus juga)
+  const slots = document.querySelectorAll(".photo-slot");
 
+  // 1. Reset posisi dan matikan bayangan (shadow bikin bug layar hitam)
   mesinZone.style.transform = "scale(1)";
-  kertas.classList.remove("printing-animation");
+  kertas.classList.remove("printing-animation"); // Pastikan sisa animasi print dihapus
   kertas.style.transition = "none";
   kertas.style.transform = "translateY(0)";
-  kertas.style.filter = "none";
+  kertas.style.filter = "none"; // PENTING: Matikan bayangan sesaat!
+  slots.forEach((slot) => (slot.style.transform = "scaleX(1)"));
 
-  // slots.forEach((slot) => (slot.style.transform = "scaleX(1)")); <--- HAPUS BARIS INI
-
+  // 2. Beri jeda 150ms biar browser selesai merender posisi baru sebelum difoto
   setTimeout(() => {
     html2canvas(kertas, { scale: 3, backgroundColor: null, useCORS: true }).then((canvas) => {
       let link = document.createElement("a");
@@ -209,12 +206,13 @@ function downloadFotbar() {
       link.href = canvas.toDataURL("image/png");
       link.click();
 
-      // slots.forEach((slot) => (slot.style.transform = "scaleX(-1)")); <--- HAPUS BARIS INI
+      // 3. Kembalikan semuanya ke semula
+      slots.forEach((slot) => (slot.style.transform = "scaleX(-1)"));
       kertas.style.transition = "transform 0.8s ease-in-out";
-      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))";
+      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))"; // Nyalakan bayangan lagi
       mesinZone.style.transform = "scale(1.30)";
     });
-  }, 150);
+  }, 150); // Jeda ini yang menyelamatkan hasil fotomu!
 }
 
 function shareFoto() {
@@ -225,15 +223,14 @@ function shareFoto() {
   kertas.classList.remove("printing-animation");
   kertas.style.transition = "none";
   kertas.style.transform = "translateY(0)";
-  kertas.style.filter = "none";
-
-  // slots.forEach((slot) => (slot.style.transform = "scaleX(1)")); <--- HAPUS BARIS INI
+  kertas.style.filter = "none"; // PENTING: Matikan bayangan
+  slots.forEach((slot) => (slot.style.transform = "scaleX(1)"));
 
   setTimeout(() => {
     html2canvas(kertas, { scale: 3, backgroundColor: null, useCORS: true }).then((canvas) => {
-      // slots.forEach((slot) => (slot.style.transform = "scaleX(-1)")); <--- HAPUS BARIS INI
+      slots.forEach((slot) => (slot.style.transform = "scaleX(-1)"));
       kertas.style.transition = "transform 0.8s ease-in-out";
-      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))";
+      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))"; // Nyalakan bayangan lagi
       mesinZone.style.transform = "scale(1.30)";
 
       canvas.toBlob(async (blob) => {
