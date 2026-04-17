@@ -8,7 +8,7 @@ body {
   background-color: #fff;
 }
 
-/* Trik Pro: Kontainer Full Screen Tanpa Merusak Posisi Elemen */
+/* 1. KODE ASLIMU (Tetap dipertahankan, ini akan dipakai oleh Desktop) */
 #home-container {
   position: absolute;
   top: 50%;
@@ -24,6 +24,21 @@ body {
   background-image: url("assets/bg-home.png");
   background-size: 100% 100%;
   background-position: center;
+}
+
+/* 2. PENYELAMAT HP LANDSCAPE (Hanya aktif di HP yang posisinya miring) */
+@media screen and (max-width: 932px) and (orientation: landscape) {
+  #home-container {
+    /* Matikan paksaan 16:9 agar tinggi layar HP yang sempit tidak meluber ke bawah */
+    width: 100vw;
+    height: 100vh;
+    min-height: unset;
+    min-width: unset;
+
+    /* Gunakan cover agar proporsi terjaga dan amankan posisi area bawah */
+    background-size: cover;
+    background-position: center bottom;
+  }
 }
 
 /* --- Keyframes (Mesin Animasi) --- */
@@ -942,5 +957,29 @@ button {
   }
   100% {
     transform: translateY(0);
+  }
+}
+
+/* --- OTOMATIS MUNCUL JIKA HP DALAM POSISI PORTRAIT (BERDIRI) --- */
+@media screen and (orientation: portrait) {
+  body::after {
+    content: "Oops! 🔄 \A \A Tolong putar HP kamu ke mode Landscape (Miring) ya biar halamannya nggak kepotong!";
+    white-space: pre-wrap;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffe6f2; /* Warna pink pastel */
+    color: #ff66b2;
+    font-family: "Darumadrop One", cursive, sans-serif;
+    font-size: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    z-index: 999999; /* Muncul paling depan menutupi segalanya */
+    box-sizing: border-box;
   }
 }
