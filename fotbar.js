@@ -182,12 +182,11 @@ function jepretKeCanvas(nomor) {
   ctx.save(); // Simpan kondisi canvas
   ctx.translate(canvas.width, 0); // Pindahkan titik awal ke pojok kanan
   ctx.scale(-1, 1); // Balikkan sumbu X (mirror horizontal)
-  
+
   // Draw gambar dengan arah yang sudah dibalik
   ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
-  
+
   ctx.restore(); // Kembalikan kondisi canvas ke semula agar aman
-}
 }
 
 // --- FUNGSI SAVE & SHARE ---
@@ -196,11 +195,11 @@ function downloadFotbar() {
   const slots = document.querySelectorAll(".photo-slot"); // (opsional, bisa dihapus juga)
 
   mesinZone.style.transform = "scale(1)";
-  kertas.classList.remove("printing-animation"); 
+  kertas.classList.remove("printing-animation");
   kertas.style.transition = "none";
   kertas.style.transform = "translateY(0)";
-  kertas.style.filter = "none"; 
-  
+  kertas.style.filter = "none";
+
   // slots.forEach((slot) => (slot.style.transform = "scaleX(1)")); <--- HAPUS BARIS INI
 
   setTimeout(() => {
@@ -212,10 +211,10 @@ function downloadFotbar() {
 
       // slots.forEach((slot) => (slot.style.transform = "scaleX(-1)")); <--- HAPUS BARIS INI
       kertas.style.transition = "transform 0.8s ease-in-out";
-      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))"; 
+      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))";
       mesinZone.style.transform = "scale(1.30)";
     });
-  }, 150); 
+  }, 150);
 }
 
 function shareFoto() {
@@ -226,16 +225,15 @@ function shareFoto() {
   kertas.classList.remove("printing-animation");
   kertas.style.transition = "none";
   kertas.style.transform = "translateY(0)";
-  kertas.style.filter = "none"; 
-  
+  kertas.style.filter = "none";
+
   // slots.forEach((slot) => (slot.style.transform = "scaleX(1)")); <--- HAPUS BARIS INI
 
   setTimeout(() => {
     html2canvas(kertas, { scale: 3, backgroundColor: null, useCORS: true }).then((canvas) => {
-      
       // slots.forEach((slot) => (slot.style.transform = "scaleX(-1)")); <--- HAPUS BARIS INI
       kertas.style.transition = "transform 0.8s ease-in-out";
-      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))"; 
+      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))";
       mesinZone.style.transform = "scale(1.30)";
 
       canvas.toBlob(async (blob) => {
