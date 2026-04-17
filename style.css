@@ -809,16 +809,27 @@ button {
 }
 
 /* KAMERA & CANVAS FOTO */
-.photo-slot,
-#live-camera {
+.photo-slot {
   position: absolute;
   left: 14.5px;
-  transform: scaleX(-1);
+  /* JANGAN KASIH TRANSFORM SCALEX DI SINI */
   width: 242px;
-  height: 178px; /* TINGGI DITAMBAH DARI 172px BIAR BENAR-BENAR MENUTUP CELAH */
+  height: 178px;
   object-fit: cover;
   background-color: transparent;
   z-index: 1;
+}
+
+#live-camera {
+  position: absolute;
+  left: 14.5px;
+  transform: scaleX(-1); /* CUMA KAMERA YANG DI-MIRROR */
+  width: 242px;
+  height: 178px;
+  object-fit: cover;
+  background-color: transparent;
+  z-index: 5;
+  top: 15px;
 }
 
 #slot-1 {

@@ -23,20 +23,22 @@ let isAutoMode = false;
 window.onload = function () {
   let framePilihan = localStorage.getItem("framePilihan");
 
-  // --- KODE BARU KHUSUS JEYUK ---
+  /// --- KODE BARU KHUSUS JEYUK ---
   if (framePilihan && framePilihan.includes("jeyuk")) {
-    tinggiSlot = 145; // Tinggi dikecilin lagi biar gak tumpah atas-bawah
-    lebarSlot = 220; // Lebar dikecilin biar gak tumpah kiri-kanan
-    geserKiri = "11px"; // Digeser sedikit ke tengah (atur angkanya kalau kurang pas)
+    tinggiSlot = 145;
+    lebarSlot = 220;
+    geserKiri = "24px";
 
-    posisiKamera = ["370px", "215px", "60px"]; // Posisi Y kamera (atas-bawah)
+    // 1. UBAH ANGKA DI SINI UNTUK MENGATUR POSISI LIVE CAMERA (Step 3, Step 2, Step 1)
+    // Aku coba tambahkan 5px dari angka sebelumnya (370->375, 215->220, 60->65)
+    posisiKamera = ["380px", "230px", "80px"];
 
-    // Geser posisi slot kanvas ke bawah
-    document.getElementById("slot-1").style.top = "60px";
-    document.getElementById("slot-2").style.top = "215px";
-    document.getElementById("slot-3").style.top = "370px";
+    // 2. UBAH ANGKA DI SINI AGAR HASIL FOTONYA JUGA IKUT TURUN (Harus sama dengan posisiKamera)
+    document.getElementById("slot-1").style.top = "80px"; // Sebelumnya 60px
+    document.getElementById("slot-2").style.top = "230px"; // Sebelumnya 215px
+    document.getElementById("slot-3").style.top = "380px"; // Sebelumnya 370px
 
-    // Ubah tinggi, lebar, dan posisi semua elemen kamera
+    // Bagian ini biarkan saja
     document.querySelectorAll(".photo-slot, #live-camera").forEach((el) => {
       el.style.height = tinggiSlot + "px";
       el.style.width = lebarSlot + "px";
@@ -184,11 +186,11 @@ function jepretKeCanvas(nomor) {
   const canvas = document.getElementById("slot-" + nomor);
   const ctx = canvas.getContext("2d");
 
-  // 1. Samakan ukurannya dengan CSS yang baru
-  canvas.width = 242;
-  canvas.height = tinggiSlot; // <--- UBAH ANGKA 178 JADI tinggiSlot
+  // 1. UKURAN HARUS DINAMIS (Ini yang bikin frame Jeyuk tadi melenceng!)
+  canvas.width = lebarSlot;
+  canvas.height = tinggiSlot;
 
-  // 2. RUMUS ANTI GEPENG (Meniru fungsi object-fit: cover)
+  // 2. RUMUS ANTI GEPENG
   const videoRatio = video.videoWidth / video.videoHeight;
   const canvasRatio = canvas.width / canvas.height;
   let sWidth = video.videoWidth;
@@ -197,34 +199,33 @@ function jepretKeCanvas(nomor) {
   let sY = 0;
 
   if (videoRatio > canvasRatio) {
-    // Jika rasio video lebih lebar dari kanvas, crop bagian kiri & kanan
     sWidth = sHeight * canvasRatio;
     sX = (video.videoWidth - sWidth) / 2;
   } else {
-    // Jika rasio video lebih tinggi dari kanvas, crop bagian atas & bawah
-    // Ini memastikan mukamu tetap proporsional, tidak ditarik jadi lebar!
     sHeight = sWidth / canvasRatio;
     sY = (video.videoHeight - sHeight) / 2;
   }
 
-  // Draw gambar dengan cropping yang proporsional
+  // 3. BIKIN MIRROR PERMANEN DI KANVAS BIAR GAK GESER SAAT DI-DOWNLOAD
+  ctx.save();
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
+
   ctx.drawImage(video, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+
+  ctx.restore();
 }
 
 // --- FUNGSI SAVE & SHARE ---
 function downloadFotbar() {
   const mesinZone = document.getElementById("mesin-print-zone");
-  const slots = document.querySelectorAll(".photo-slot");
 
-  // 1. Reset posisi dan matikan bayangan (shadow bikin bug layar hitam)
   mesinZone.style.transform = "scale(1)";
-  kertas.classList.remove("printing-animation"); // Pastikan sisa animasi print dihapus
+  kertas.classList.remove("printing-animation");
   kertas.style.transition = "none";
   kertas.style.transform = "translateY(0)";
-  kertas.style.filter = "none"; // PENTING: Matikan bayangan sesaat!
-  slots.forEach((slot) => (slot.style.transform = "scaleX(1)"));
+  kertas.style.filter = "none";
 
-  // 2. Beri jeda 150ms biar browser selesai merender posisi baru sebelum difoto
   setTimeout(() => {
     html2canvas(kertas, { scale: 3, backgroundColor: null, useCORS: true }).then((canvas) => {
       let link = document.createElement("a");
@@ -232,31 +233,26 @@ function downloadFotbar() {
       link.href = canvas.toDataURL("image/png");
       link.click();
 
-      // 3. Kembalikan semuanya ke semula
-      slots.forEach((slot) => (slot.style.transform = "scaleX(-1)"));
       kertas.style.transition = "transform 0.8s ease-in-out";
-      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))"; // Nyalakan bayangan lagi
+      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))";
       mesinZone.style.transform = "scale(1.30)";
     });
-  }, 150); // Jeda ini yang menyelamatkan hasil fotomu!
+  }, 150);
 }
 
 function shareFoto() {
   const mesinZone = document.getElementById("mesin-print-zone");
-  const slots = document.querySelectorAll(".photo-slot");
 
   mesinZone.style.transform = "scale(1)";
   kertas.classList.remove("printing-animation");
   kertas.style.transition = "none";
   kertas.style.transform = "translateY(0)";
-  kertas.style.filter = "none"; // PENTING: Matikan bayangan
-  slots.forEach((slot) => (slot.style.transform = "scaleX(1)"));
+  kertas.style.filter = "none";
 
   setTimeout(() => {
     html2canvas(kertas, { scale: 3, backgroundColor: null, useCORS: true }).then((canvas) => {
-      slots.forEach((slot) => (slot.style.transform = "scaleX(-1)"));
       kertas.style.transition = "transform 0.8s ease-in-out";
-      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))"; // Nyalakan bayangan lagi
+      kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))";
       mesinZone.style.transform = "scale(1.30)";
 
       canvas.toBlob(async (blob) => {
@@ -272,5 +268,5 @@ function shareFoto() {
         }
       });
     });
-  }, 150); // Jeda ini wajib ada!
+  }, 150);
 }
