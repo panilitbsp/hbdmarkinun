@@ -1,0 +1,946 @@
+/* style.css */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Wajib ada biar layar tidak bisa di-scroll saat gambar lubèr */
+  background-color: #fff;
+}
+
+/* Trik Pro: Kontainer Full Screen Tanpa Merusak Posisi Elemen */
+#home-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Menjaga gambar tetap pas di tengah */
+
+  /* Paksa rasio 16:9 agar menutupi seluruh layar tanpa border */
+  width: 100vw;
+  height: 56.25vw; /* Didapat dari (9 / 16) * 100 */
+  min-height: 100vh;
+  min-width: 177.78vh; /* Didapat dari (16 / 9) * 100 */
+
+  background-image: url("assets/bg-home.png");
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+/* --- Keyframes (Mesin Animasi) --- */
+@keyframes rock-patch {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes spin-button {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes jump {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  } /* Efek loncat ke atas */
+}
+/* --- Posisi & Animasi Tiap Elemen --- */
+
+/* Judul Utama */
+#main-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48%; /* Menyesuaikan referensi gambar 2 */
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 10;
+}
+#main-title:hover {
+  transform: translate(-50%, -50%) scale(1.08); /* Pop-up membesar */
+}
+
+/* Patch Angelic Pretty (Goyang) */
+#ap-patch {
+  position: absolute;
+  top: 9%;
+  left: 12%; /* Sesuai letak di gambar referensi */
+  width: 11%;
+  transform-origin: center; /* Biar goyangnya di poros tengah */
+  animation: rock-patch 4s ease-in-out infinite;
+  z-index: 10;
+}
+
+/* Kancing Bunga Hijau (Muter berlawanan arah) */
+#flower-btn {
+  position: absolute;
+  bottom: 19%;
+  left: 12%; /* Disesuaikan sedikit posisinya */
+  width: 8.5%; /* <-- Diperbesar dari 6.5% jadi 8.5% */
+  transform-origin: center;
+  animation: spin-button 7s linear infinite reverse;
+  z-index: 10;
+}
+
+/* Kancing Bintang Kuning (Muter) */
+#star-btn {
+  position: absolute;
+  bottom: 12%;
+  left: 8%;
+  width: 4.5%;
+  transform-origin: center;
+  animation: spin-button 5s linear infinite;
+  z-index: 10;
+}
+
+/* Patch Hati Pink */
+#heart-patch {
+  position: absolute;
+  bottom: 29%;
+  right: 6%;
+  width: 4%;
+  z-index: 10;
+}
+
+/* Catatan Kanan Bawah (Diturunin) */
+#worries-note {
+  position: absolute;
+  bottom: 1%; /* <-- Diturunin dari 7% jadi 3% biar nempel ke bawah */
+  right: 4%;
+  width: 22%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 10;
+}
+#worries-note:hover {
+  transform: scale(1.1);
+}
+
+/* Tombol Start Awan */
+#start-link {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 13%; /* <-- Dikecilin dari 16% jadi 13% */
+  z-index: 10;
+  display: block;
+}
+#start-btn {
+  width: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+#start-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Patch Kelinci (Loncat) */
+#rabbit-patch {
+  position: absolute;
+  top: 12%;
+  right: 16%; /* Posisi di atas pola kotak-kotak biru */
+  width: 12%;
+  animation: jump 1.5s ease-in-out infinite; /* Animasi loncat jalan terus */
+  z-index: 10;
+}
+
+/* --- LAYOUT DRESS UP (FREE DRAG) --- */
+#dressup-body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fcfcfc;
+  /* background-image: url("assets/dressup/bg-kertas-lecek.png"); */
+  background-size: cover;
+  overflow: hidden;
+  position: relative;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+#dressup-title {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35vw; /* Ukuran judul */
+  pointer-events: none; /* Biar judul nggak ketarik */
+  z-index: 5;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+/* Karakter diam di tengah */
+#base-character {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 75vh; /* Tinggi karakter */
+  pointer-events: none; /* Karakter dasar nggak bisa ditarik */
+  z-index: 1;
+}
+
+/* Item baju yang disebar */
+.draggable-item {
+  position: absolute;
+  height: auto;
+  cursor: grab;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.15)); /* Bayangan biar mengambang */
+  touch-action: none; /* Penting! Mencegah layar geser saat drag di HP/Tablet */
+}
+
+.draggable-item:active {
+  cursor: grabbing;
+  filter: drop-shadow(0 15px 20px rgba(0, 0, 0, 0.3)); /* Bayangan menjauh pas diangkat */
+}
+
+/* Tombol Foto */
+#next-photo-btn {
+  position: absolute;
+  bottom: 80px;
+  right: 40px;
+  background-color: #ff99cc; /* Pink lucu */
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  border: 3px solid white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  transition: transform 0.2s;
+}
+
+#next-photo-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Tombol Kembali */
+#back-btn {
+  position: absolute;
+  top: 10px;
+  left: 40px;
+  background-color: #ff99cc; /* Pink lucu */
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  border: 3px solid white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  transition: transform 0.2s;
+}
+
+#back-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Styling untuk pembungkus judul (cuma ngatur posisinya aja) */
+#dressup-title {
+  position: absolute;
+  top: 4px; /* <-- Angkanya dikecilin biar lebih naik (bisa diset 0px kalau kurang naik) */
+  margin-top: 0; /* <-- Tambahkan baris ini untuk membuang jarak bawaan browser */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Styling warnanya dipindah ke sini biar nempel ke masing-masing huruf! */
+.falling-letter {
+  display: inline-block;
+  pointer-events: auto; /* Biar hurufnya aja yang bisa diklik */
+  cursor: pointer;
+  transition: transform 0.1s;
+
+  /* PENGATURAN FONT & WARNA DI SINI */
+  font-family: "Darumadrop One", cursive;
+  font-size: 5vw;
+  color: #ff99cc; /* Pink lucu */
+  -webkit-text-stroke: 2px white; /* Garis pinggir putih */
+  text-shadow: 4px 4px 0px #ffe6f2; /* Bayangan tebal ala Y2K */
+}
+
+.falling-letter:hover {
+  transform: scale(1.1) translateY(-5px);
+  color: #ffeb99; /* Berubah kuning pastel pas mau diklik */
+}
+
+/* --- LAYOUT HALAMAN FOTO --- */
+#photobooth-body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("assets/bg-photo.png"); /* Background kotak-kotak pink */
+  background-size: cover;
+  background-position: top center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: "Darumadrop One", cursive;
+}
+
+#slider-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px; /* Kembali ke jarak positif biasa, gak usah minus */
+  margin-top: 10vh;
+}
+
+/* Tombol Panah Kiri & Kanan */
+.arrow-btn {
+  background-color: #ff99cc;
+  color: white;
+  border: 4px solid white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.arrow-btn:hover {
+  transform: scale(1.1);
+  background-color: #ff66b2;
+}
+
+/* Area Panggung Foto */
+#photo-stage {
+  position: relative;
+  width: 55vh; /* <-- AKAR MASALAHNYA DI SINI. Tadi 105vh itu selebar gaban, makanya panahnya menjauh. Sekarang kita kecilin! */
+  height: 75vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Susunan Layer Z-Index */
+#alas-bg {
+  position: absolute;
+  /* Width & height nggak diatur di sini lagi karena udah diurus sama Javascript (biar bisa beda-beda) */
+  object-fit: contain;
+  z-index: 1;
+}
+
+/* Pembungkus karakter yang ukurannya nge-pas sama badan */
+#character-wrapper {
+  position: absolute;
+  top: 53%; /* <-- Karakter dinaikkan sedikit biar frame-nya terasa lebih turun ke bawah (sebelumnya 50%) */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 65%; /* <-- Karakter dikecilkan sedikit biar muat masuk ke bolongan frame (sebelumnya 75%) */
+  display: inline-block;
+  z-index: 2;
+}
+
+#base-result {
+  height: 100%;
+  width: auto;
+  display: block;
+}
+
+#clothes-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.saved-item {
+  position: absolute;
+  pointer-events: none;
+  transform: none !important; /* Paksa hapus efek magnet dari halaman sebelumnya biar gak geser */
+}
+
+#frame-fg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Baju hasil simpanan di halaman foto */
+.saved-item {
+  position: absolute;
+  pointer-events: none; /* Baju udah gak bisa ditarik lagi di sini */
+}
+
+/* --- STYLING TOMBOL HASIL & SHARE --- */
+.action-buttons {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  z-index: 1000;
+}
+
+#save-gallery-btn,
+#next-to-fotbar {
+  width: 65px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.15));
+}
+#save-gallery-btn:hover,
+#next-to-fotbar:hover {
+  transform: scale(1.1);
+}
+/* Tombol Share Lucu */
+#share-social-btn {
+  background-color: #ffb366;
+  color: white;
+  border: 3px solid white;
+  padding: 0 25px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-family: "Darumadrop One", cursive;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s;
+  height: 60px; /* Disamain sama tinggi tombol icon sebelahnya */
+  display: flex;
+  align-items: center;
+}
+#share-social-btn:hover {
+  transform: scale(1.1);
+  background-color: #ff9933;
+}
+/* --- LAYOUT FOTBAR KAMERA --- */
+#fotbar-body {
+  background: linear-gradient(to bottom, #ffe6f2, #ffb3d9); /* Pink pastel ala photobooth */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Darumadrop One", cursive;
+  margin: 0;
+}
+
+#fotbar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.fotbar-title {
+  color: white;
+  text-shadow: 2px 2px 0px #ff66b2;
+  margin: 0;
+  font-size: 40px;
+}
+
+/* Panggung Kamera (Diatur rasionya misal 3:4) */
+#camera-stage {
+  position: relative;
+  width: 360px; /* Sesuaikan dengan lebar frame kamu */
+  height: 480px; /* Sesuaikan dengan tinggi frame kamu */
+  background-color: black;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+#webcam-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Biar videonya memenuhi kotak tanpa gepeng */
+  transform: scaleX(-1); /* Efek cermin biar kaya ngaca beneran */
+}
+
+#bias-frame-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 10; /* Frame selalu di depan video */
+  pointer-events: none;
+}
+
+/* Tombol Bias & Filter */
+.bias-selector,
+.filter-selector {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+button {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.bias-btn,
+.filter-btn {
+  background-color: white;
+  border: 2px solid #ff99cc;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-weight: bold;
+  color: #ff66b2;
+}
+
+.bias-btn:hover,
+.filter-btn:hover,
+.bias-btn.active {
+  background-color: #ff99cc;
+  color: white;
+  transform: scale(1.05);
+}
+
+.special-btn {
+  border-color: #ffd700;
+  color: #cca300;
+}
+.special-btn:hover,
+.special-btn.active {
+  background-color: #ffd700;
+  color: white;
+}
+
+/* Kontrol Kamera */
+.camera-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+#capture-btn {
+  background-color: #ff66b2;
+  color: white;
+  border: 3px solid white;
+  padding: 15px 30px;
+  border-radius: 30px;
+  font-size: 20px;
+  box-shadow: 0 4px 10px rgba(255, 102, 178, 0.4);
+}
+#capture-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Efek Flash Putih saat difoto */
+#flash-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s;
+}
+
+/* --- LAYOUT HALAMAN PILIH FRAME --- */
+#pilih-frame-body {
+  background: radial-gradient(circle, #ffe6f2 10%, #ffffff 80%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Darumadrop One", cursive;
+  margin: 0;
+}
+
+.pilih-title {
+  /* 1. Warna baru sesuai request */
+  color: #ffe7e9; /* Dalemnya baby pink */
+
+  /* 2. Bikin font lebih gendut */
+  font-weight: 900;
+  font-size: 60px;
+
+  /* 3. Border Luar */
+  -webkit-text-stroke: 10px #ff88c2; /* Outline Barbie Pink (Aku tebelin jadi 8px biar makin lucu) */
+
+  /* 4. INI KUNCI RAHASIANYA! Biar outline ada di luar dan teksnya gak menyempit */
+  paint-order: stroke fill;
+  margin-bottom: 40px;
+  text-align: center;
+  letter-spacing: 4px; /* Direnggangin dikit biar outline antar huruf gak saling tabrakan */
+}
+
+/* Wrapper pembungkus panah dan gambar */
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 95vw;
+}
+
+/* Tombol Panah Slider */
+.carousel-btn {
+  background-color: #ff99cc;
+  color: white;
+  border: 4px solid white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.carousel-btn:hover {
+  transform: scale(1.1);
+  background-color: #ff66b2;
+}
+
+/* Wadah Slider (Sekarang pakai Flex mendatar, BUKAN Grid) */
+.frame-slider-container {
+  display: flex; /* Berjejer ke samping */
+  gap: 25px;
+  width: 80vw; /* Lebar area yang kelihatan */
+  overflow-x: auto; /* Kunci biar bisa digeser */
+  padding: 30px 20px;
+  align-items: center;
+  scroll-behavior: smooth;
+}
+
+/* Sembunyikan scrollbar bawaan biar rapi */
+.frame-slider-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Pengaturan masing-masing frame */
+.frame-option {
+  height: 50vh; /* Tinggi standar */
+  width: auto;
+  flex-shrink: 0; /* WAJIB ADA biar gambar gak gepeng kegencet */
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+}
+
+/* TRIK KHUSUS JEYUK: Dipaksa lebih tinggi biar seukuran sama yang lain */
+.special-frame {
+  height: 56vh; /* Lebihin dari 50vh biar gak kelihatan kekecilan */
+}
+
+/* --- EFEK HOVER NYALA (HANYA PAKAI DROP-SHADOW, NO BOX-SHADOW!) --- */
+.frame-option:hover {
+  transform: scale(1.05) translateY(-10px);
+  filter: drop-shadow(0 15px 30px rgba(255, 153, 204, 0.7)); /* Glow Pink Doyoung */
+}
+
+.special-frame:hover {
+  transform: scale(1.05) translateY(-10px);
+  filter: drop-shadow(0 15px 30px rgba(255, 215, 0, 0.9)) !important; /* Glow Emas Jeyuk */
+  box-shadow: none !important; /* Bunuh semua shadow kotak bawaan kalau masih ada */
+}
+
+/* --- LAYOUT STUDIO FOTBAR ALL-IN-ONE --- */
+#fotbar-body {
+  background: radial-gradient(circle, #ffebf5 0%, #ffffff 70%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: "Darumadrop One", cursive;
+  margin: 0;
+  overflow: hidden;
+  padding-top: 20px;
+}
+
+#back-btn {
+  position: absolute;
+  top: 25px;
+  left: 30px;
+  background-color: #ff99cc;
+  color: white;
+  border: 3px solid white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 18px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transition: transform 0.2s;
+}
+#back-btn:hover {
+  transform: scale(1.05);
+}
+
+.fotbar-title {
+  color: #ff66b2;
+  font-weight: 900;
+  font-size: 55px;
+  -webkit-text-stroke: 8px white;
+  paint-order: stroke fill;
+  text-shadow: 0px 5px 15px rgba(255, 102, 178, 0.3);
+  margin: 0;
+  margin-bottom: 10px;
+  z-index: 10;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+#photobooth-machine {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  height: 650px;
+}
+#mesin-print-zone {
+  position: relative;
+  width: 360px;
+  height: 600px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  transform: scale(1.3);
+  transform-origin: top center;
+}
+#mesin-utuh,
+#mesin-setengah {
+  position: absolute;
+  top: 0;
+  width: 340px;
+  height: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+#mesin-utuh {
+  z-index: 10;
+}
+#mesin-setengah {
+  z-index: 30;
+}
+
+/* KERTAS PHOTOSTRIP */
+#photostrip-paper {
+  position: absolute;
+  top: 30px;
+  width: 270px;
+  height: 580px;
+
+  /* HAPUS WARNA HITAM! Kita jadikan transparan biar murni ngikutin frame aslimu */
+  background-color: transparent;
+
+  /* Pindahkan shadow ke filter biar ngikutin bentuk frame transparanmu */
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2));
+
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 20;
+  transition: transform 0.8s ease-in-out;
+}
+
+#bias-overlay {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* KUNCI: Contain bikin dia presisi asli tanpa melar/ke-crop! */
+  object-fit: contain;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* KAMERA & CANVAS FOTO */
+.photo-slot,
+#live-camera {
+  position: absolute;
+  left: 14.5px;
+  transform: scaleX(-1);
+  width: 242px;
+  height: 178px; /* TINGGI DITAMBAH DARI 172px BIAR BENAR-BENAR MENUTUP CELAH */
+  object-fit: cover;
+  background-color: transparent;
+  z-index: 1;
+}
+
+#slot-1 {
+  top: 15px;
+} /* DIUBAH JADI 15px BIAR COCOK SAMA POSISI KAMERA DI JS */
+#slot-2 {
+  top: 190px;
+}
+#slot-3 {
+  top: 365px;
+}
+
+#live-camera {
+  top: 15px;
+  z-index: 5;
+}
+
+/* PANEL KANAN & TOMBOL */
+.right-panel-controls {
+  position: absolute;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 100;
+}
+.right-panel-controls button {
+  background-color: #ff66b2;
+  color: white;
+  border: 3px solid white;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-size: 20px;
+  font-family: "Darumadrop One", cursive;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+.right-panel-controls button:hover {
+  transform: scale(1.05);
+  background-color: #ff3399;
+}
+#auto-capture-btn {
+  background-color: #ff3333;
+} /* Warna merah buat Auto */
+#auto-capture-btn:hover {
+  background-color: #cc0000;
+}
+#retake-btn {
+  background-color: #ffb366;
+}
+#retake-btn:hover {
+  background-color: #ff9933;
+}
+#next-btn {
+  background-color: #66ccff;
+}
+#next-btn:hover {
+  background-color: #33bbff;
+}
+
+/* TOMBOL HASIL & TIMER */
+.action-buttons {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  z-index: 1000;
+}
+#save-gallery-btn,
+#next-to-fotbar {
+  width: 65px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.15));
+}
+#save-gallery-btn:hover,
+#next-to-fotbar:hover {
+  transform: scale(1.1);
+}
+#share-social-btn {
+  background-color: #ffb366;
+  color: white;
+  border: 3px solid white;
+  padding: 0 25px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-family: "Darumadrop One", cursive;
+  cursor: pointer;
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+#share-social-btn:hover {
+  transform: scale(1.1);
+  background-color: #ff9933;
+}
+
+#countdown-text {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  right: calc(50% + 220px);
+  font-size: 150px;
+  color: #ff66b2;
+  font-weight: 900;
+  -webkit-text-stroke: 6px white;
+  paint-order: stroke fill;
+  text-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  z-index: 200;
+  display: none;
+}
+#flash-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s;
+}
+.printing-animation {
+  animation: slideOut 3.5s ease-out forwards;
+}
+@keyframes slideOut {
+  0% {
+    transform: translateY(-110%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

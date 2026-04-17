@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pilih Frame Biasmu!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body id="pilih-frame-body">
+    <h1 class="pilih-title" data-text="KLIK TO CHOOSE">CLICK TO CHOOSE</h1>
+
+    <div class="carousel-wrapper">
+      <button class="carousel-btn" onclick="geserSlider(-1)">❮</button>
+
+      <div class="frame-slider-container" id="frame-slider">
+        <img src="assets/fotbar/doy 1.png" class="frame-option" onclick="pilihIni('assets/fotbar/doy 1.png')" />
+        <img src="assets/fotbar/doy 2.png" class="frame-option" onclick="pilihIni('assets/fotbar/frame 3.png')" />
+        <img src="assets/fotbar/doy 3.png" class="frame-option" onclick="pilihIni('assets/fotbar/doy 3.png')" />
+        <img src="assets/fotbar/doy 4.png" class="frame-option" onclick="pilihIni('assets/fotbar/doy 4.png')" />
+        <img src="assets/fotbar/doy 5.png" class="frame-option" onclick="pilihIni('assets/fotbar/doy 5.png')" />
+        <img src="assets/fotbar/doy 6.png" class="frame-option" onclick="pilihIni('assets/fotbar/doy 6.png')" />
+
+        <img src="assets/fotbar/jeyuk.png" class="frame-option special-frame" onclick="pilihIni('assets/fotbar/jeyuk.png')" />
+      </div>
+
+      <button class="carousel-btn" onclick="geserSlider(1)">❯</button>
+    </div>
+
+    <script>
+      function pilihIni(frameSrc) {
+        localStorage.setItem("framePilihan", frameSrc);
+        window.location.href = "fotbar.html";
+      }
+
+      // Mesin buat ngegeser slider menyamping
+      function geserSlider(arah) {
+        const slider = document.getElementById("frame-slider");
+        // Angka 350 ini adalah jarak gesernya, bisa kamu besarin/kecilin
+        slider.scrollBy({ left: arah * 350, behavior: "smooth" });
+      }
+    </script>
+  </body>
+</html>

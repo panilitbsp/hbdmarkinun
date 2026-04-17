@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fotbar Time! 📸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  </head>
+  <body id="fotbar-body">
+    <a href="pilih-frame.html" id="back-btn">❮ BACK</a>
+
+    <h1 class="fotbar-title">SMILE FOR THE CAMERA! ✨</h1>
+
+    <div id="photobooth-machine">
+      <div id="mesin-print-zone">
+        <img src="assets/fotbar/mesin-utuh.png" id="mesin-utuh" alt="Mesin Belakang" />
+
+        <div id="photostrip-paper">
+          <canvas id="slot-1" class="photo-slot"></canvas>
+          <canvas id="slot-2" class="photo-slot"></canvas>
+          <canvas id="slot-3" class="photo-slot"></canvas>
+
+          <video id="live-camera" autoplay playsinline></video>
+          <img id="bias-overlay" src="" alt="Loading Frame..." />
+
+          <div id="flash-screen"></div>
+        </div>
+
+        <img src="assets/fotbar/mesin-setengah.png" id="mesin-setengah" alt="Mesin Depan" />
+      </div>
+    </div>
+
+    <div class="right-panel-controls">
+      <button id="auto-capture-btn" onclick="mulaiAuto()">⚡ AUTO CAPTURE</button>
+      <button id="capture-btn" onclick="mulaiManual()">📸 MANUAL CAPTURE (1/3)</button>
+      <button id="retake-btn" onclick="retakeFoto()" style="display: none">🔄 RETAKE</button>
+      <button id="next-btn" onclick="lanjutFrameManual()" style="display: none">⬇️ NEXT FRAME</button>
+    </div>
+
+    <div id="result-buttons" style="display: none" class="action-buttons">
+      <button id="share-social-btn" onclick="shareFoto()">📲 SHARE</button>
+      <img src="assets/download-btn.png" id="save-gallery-btn" onclick="downloadFotbar()" alt="Save to Gallery" />
+      <a href="hasil-foto.html">
+        <img src="assets/next-btn.png" id="next-to-fotbar" alt="Share / Next" />
+      </a>
+    </div>
+
+    <div id="countdown-text"></div>
+
+    <script src="fotbar.js"></script>
+  </body>
+</html>

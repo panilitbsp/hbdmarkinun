@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photobooth Results!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Darumadrop+One&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  </head>
+  <body id="photobooth-body">
+    <div id="slider-container">
+      <button class="arrow-btn" onclick="gantiFrame(-1)">❮</button>
+
+      <div id="photo-stage">
+        <img id="alas-bg" src="assets/alas-frame-1.png" alt="Alas" />
+
+        <div id="character-wrapper">
+          <img src="assets/dressup/base-character.png" id="base-result" alt="Base" />
+          <div id="clothes-container"></div>
+        </div>
+
+        <img id="frame-fg" src="assets/frame-1.png" alt="Frame" />
+      </div>
+
+      <button class="arrow-btn" onclick="gantiFrame(1)">❯</button>
+    </div>
+
+    <div class="action-buttons">
+      <img src="assets/download-btn.png" id="save-gallery-btn" onclick="downloadPhoto()" alt="Download" />
+
+      <a href="pilih-frame.html">
+        <img src="assets/next-btn.png" id="next-to-fotbar" alt="Next" />
+      </a>
+    </div>
+    <a href="dressup.html" id="back-btn"><</a>
+
+    <script src="hasil-foto.js"></script>
+  </body>
+</html>
