@@ -12,13 +12,39 @@ const panelKanan = document.querySelector(".right-panel-controls");
 
 const urutanSlotIds = [3, 2, 1];
 const posisiKertas = ["-350px", "-175px", "0px"];
-const posisiKamera = ["365px", "190px", "15px"];
+let posisiKamera = ["365px", "190px", "15px"];
+let tinggiSlot = 178;
+let lebarSlot = 242; // <-- Tambahan: buat ngatur lebar default
+let geserKiri = "0px"; // <-- Tambahan: buat ngatur posisi X (kiri/kanan)
 
 let langkahSekarang = 0;
-let isAutoMode = false; // Mode pembeda Auto vs Manual
+let isAutoMode = false;
 
 window.onload = function () {
   let framePilihan = localStorage.getItem("framePilihan");
+
+  // --- KODE BARU KHUSUS JEYUK ---
+  if (framePilihan && framePilihan.includes("jeyuk")) {
+    tinggiSlot = 145; // Tinggi dikecilin lagi biar gak tumpah atas-bawah
+    lebarSlot = 220; // Lebar dikecilin biar gak tumpah kiri-kanan
+    geserKiri = "11px"; // Digeser sedikit ke tengah (atur angkanya kalau kurang pas)
+
+    posisiKamera = ["370px", "215px", "60px"]; // Posisi Y kamera (atas-bawah)
+
+    // Geser posisi slot kanvas ke bawah
+    document.getElementById("slot-1").style.top = "60px";
+    document.getElementById("slot-2").style.top = "215px";
+    document.getElementById("slot-3").style.top = "370px";
+
+    // Ubah tinggi, lebar, dan posisi semua elemen kamera
+    document.querySelectorAll(".photo-slot, #live-camera").forEach((el) => {
+      el.style.height = tinggiSlot + "px";
+      el.style.width = lebarSlot + "px";
+      el.style.left = geserKiri;
+    });
+  }
+  // -----------------------------
+
   if (framePilihan) {
     frameOverlay.src = framePilihan;
   }
@@ -160,7 +186,7 @@ function jepretKeCanvas(nomor) {
 
   // 1. Samakan ukurannya dengan CSS yang baru
   canvas.width = 242;
-  canvas.height = 178;
+  canvas.height = tinggiSlot; // <--- UBAH ANGKA 178 JADI tinggiSlot
 
   // 2. RUMUS ANTI GEPENG (Meniru fungsi object-fit: cover)
   const videoRatio = video.videoWidth / video.videoHeight;
