@@ -815,7 +815,7 @@ button {
   /* JANGAN KASIH TRANSFORM SCALEX DI SINI */
   width: 242px;
   height: 178px;
-  object-fit: cover;
+  /* object-fit: cover; */
   background-color: transparent;
   z-index: 1;
 }

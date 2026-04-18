@@ -23,22 +23,29 @@ let isAutoMode = false;
 window.onload = function () {
   let framePilihan = localStorage.getItem("framePilihan");
 
-  /// --- KODE BARU KHUSUS JEYUK ---
+  // --- KODE BARU KHUSUS JEYUK ---
   if (framePilihan && framePilihan.includes("jeyuk")) {
-    tinggiSlot = 145;
-    lebarSlot = 220;
-    geserKiri = "24px";
+    // 1. KUNCI RAHASIA: Panjangkan kertas 75px untuk tempat mahkota Jeyuk!
+    // Kertas asli 580px + 75px mahkota = 655px
+    kertas.style.height = "670px";
 
-    // 1. UBAH ANGKA DI SINI UNTUK MENGATUR POSISI LIVE CAMERA (Step 3, Step 2, Step 1)
-    // Aku coba tambahkan 5px dari angka sebelumnya (370->375, 215->220, 60->65)
-    posisiKamera = ["380px", "230px", "80px"];
+    // Matikan bug html2canvas yang suka narik-narik gambar
+    frameOverlay.style.objectFit = "fill";
 
-    // 2. UBAH ANGKA DI SINI AGAR HASIL FOTONYA JUGA IKUT TURUN (Harus sama dengan posisiKamera)
-    document.getElementById("slot-1").style.top = "80px"; // Sebelumnya 60px
-    document.getElementById("slot-2").style.top = "230px"; // Sebelumnya 215px
-    document.getElementById("slot-3").style.top = "380px"; // Sebelumnya 370px
+    // 2. Kembalikan ukuran ke ukuran Normal Doyoung (Gak perlu disquish lagi!)
+    tinggiSlot = 179;
+    lebarSlot = 242;
+    geserKiri = "14px";
 
-    // Bagian ini biarkan saja
+    // 3. Karena kertas memanjang 75px di atas, semua posisi lubang
+    // otomatis harus diturunin tepat 75px dari posisi aslinya.
+    posisiKamera = ["437px", "262px", "85px"];
+
+    document.getElementById("slot-1").style.top = "80px";
+    document.getElementById("slot-2").style.top = "265px";
+    document.getElementById("slot-3").style.top = "440px";
+
+    // Terapkan ulang ukurannya
     document.querySelectorAll(".photo-slot, #live-camera").forEach((el) => {
       el.style.height = tinggiSlot + "px";
       el.style.width = lebarSlot + "px";
@@ -237,7 +244,7 @@ function downloadFotbar() {
       kertas.style.filter = "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2))";
       mesinZone.style.transform = "scale(1.30)";
     });
-  }, 150);
+  }, 500);
 }
 
 function shareFoto() {
@@ -268,5 +275,5 @@ function shareFoto() {
         }
       });
     });
-  }, 150);
+  }, 500);
 }
